@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: image-retrieval-ingress
+spec:
+  rules:
+  - host: 'image-retrieval'
+    http:
+      paths:
+      - backend:
+          serviceName: image-retrieval-service
+          servicePort: 80
