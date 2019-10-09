@@ -16,6 +16,13 @@ spec:
         name: image-retrieval
         ports:
         - containerPort: 80
+        volumeMounts:
+        - name: proxy-cert
+          mountPath: /etc/ssl/k8s/proxy-cert
+      volumes:
+      - name: proxy-cert
+        secret:
+          secretName: proxy-cert
   replicas: 3
   selector:
     matchLabels:

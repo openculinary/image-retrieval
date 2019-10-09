@@ -6,11 +6,11 @@ import requests
 
 def request_patch(self, *args, **kwargs):
     kwargs['proxies'] = {
-        'http': 'http://localhost:3128',
-        'https': 'http://localhost:3128',
+        'http': 'http://proxy:3128',
+        'https': 'http://proxy:3443',
     }
     kwargs['timeout'] = kwargs.pop('timeout', 5)
-    kwargs['verify'] = '/etc/squid/certificates/ca.crt'
+    kwargs['verify'] = '/etc/ssl/k8s/proxy-cert/ca.crt'
     return self.request_orig(*args, **kwargs)
 
 
