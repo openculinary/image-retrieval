@@ -27,10 +27,7 @@ app = Flask(__name__)
 @app.route('/<path:recipe_path>')
 def root(recipe_path):
     recipe_id = path.basename(recipe_path)
-    recipe = requests.get(
-        url='http://api-service',
-        params={'recipe_id': recipe_id}
-    )
+    recipe = requests.get(f'http://api-service/api/recipes/{recipe_id}/view')
 
     try:
         recipe.raise_for_status()
