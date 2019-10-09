@@ -5,12 +5,12 @@ import requests
 
 
 def request_patch(self, *args, **kwargs):
-    kwargs['proxies'] = {
+    kwargs['proxies'] = kwargs.pop('proxies', {
         'http': 'http://proxy:3128',
         'https': 'http://proxy:3443',
-    }
+    })
     kwargs['timeout'] = kwargs.pop('timeout', 5)
-    kwargs['verify'] = '/etc/ssl/k8s/proxy-cert/ca.crt'
+    kwargs['verify'] = kwargs.pop('verify', '/etc/ssl/k8s/proxy-cert/ca.crt')
     return self.request_orig(*args, **kwargs)
 
 
@@ -27,7 +27,10 @@ app = Flask(__name__)
 @app.route('/<path:recipe_path>')
 def root(recipe_path):
     recipe_id = path.basename(recipe_path)
-    recipe = requests.get(f'http://api-service/api/recipes/{recipe_id}/view')
+    recipe = requests.get(
+        url=f'http://api-service/api/recipes/{recipe_id}/view',
+        proxies={}
+    )
 
     try:
         recipe.raise_for_status()
