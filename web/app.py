@@ -47,4 +47,4 @@ def root(recipe_path):
     except Exception:
         return abort(404)
 
-    return image.content
+    return image.content, 200, {'Content-Type': image.headers['Content-Type']}
