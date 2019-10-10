@@ -30,7 +30,7 @@ def root(recipe_path):
     recipe_id, extension = path.splitext(image_filename)
 
     recipe = requests.get(
-        url=f'http://api-service/api/recipes/{recipe_id}/view',
+        url=f'http://api-service/api/recipes/{recipe_id}',
         proxies={}
     )
 
