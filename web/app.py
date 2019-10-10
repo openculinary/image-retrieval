@@ -26,7 +26,9 @@ app = Flask(__name__)
 
 @app.route('/<path:recipe_path>')
 def root(recipe_path):
-    recipe_id = path.basename(recipe_path)
+    image_filename = path.basename(recipe_path)
+    recipe_id, extension = path.splitext(image_filename)
+
     recipe = requests.get(
         url=f'http://api-service/api/recipes/{recipe_id}/view',
         proxies={}
