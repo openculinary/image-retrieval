@@ -7,7 +7,7 @@ import requests
 def request_patch(self, *args, **kwargs):
     kwargs['proxies'] = kwargs.pop('proxies', {
         'http': 'http://proxy:3128',
-        'https': 'http://proxy:3443',
+        'https': 'http://proxy:3128',
     })
     kwargs['timeout'] = kwargs.pop('timeout', 5)
     kwargs['verify'] = kwargs.pop('verify', '/etc/ssl/k8s/proxy-cert/ca.crt')
