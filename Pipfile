@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 Flask = "*"
+recipe-scrapers = "*"
 requests = "*"
 gunicorn = "*"
 

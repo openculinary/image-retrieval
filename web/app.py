@@ -1,6 +1,7 @@
 from os import path
 
 from flask import Flask, abort
+from recipe_scrapers._abstract import HEADERS
 import requests
 
 
@@ -40,7 +41,7 @@ def root(recipe_path):
         return abort(404)
 
     image_src = recipe.json().get('image_src')
-    image = requests.get(image_src)
+    image = requests.get(image_src, headers=HEADERS)
 
     try:
         image.raise_for_status()
