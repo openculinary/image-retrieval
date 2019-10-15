@@ -4,7 +4,7 @@ metadata:
   name: image-retrieval-ingress
 spec:
   rules:
-  - host: 'image-retrieval'
+  - host: image-retrieval
     http:
       paths:
       - backend:
