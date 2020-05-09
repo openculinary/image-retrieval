@@ -25,9 +25,8 @@ requests.sessions.Session.request = request_patch
 app = Flask(__name__)
 
 
-@app.route('/<path:recipe_path>')
-def root(recipe_path):
-    image_filename = path.basename(recipe_path)
+@app.route('/recipes/<image_filename>')
+def recipe(image_filename):
     recipe_id, extension = path.splitext(image_filename)
 
     recipe = requests.get(
@@ -41,7 +40,11 @@ def root(recipe_path):
         return abort(404)
 
     image_src = recipe.json().get('image_src')
-    image = requests.get(image_src, headers=HEADERS)
+    image = requests.get(
+        url=f'http://imageproxy/192,png/{image_src}',
+        headers=HEADERS,
+        proxies={}
+    )
 
     try:
         image.raise_for_status()
