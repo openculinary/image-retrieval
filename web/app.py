@@ -1,7 +1,6 @@
 from os import path
 
 from flask import Flask, abort
-from recipe_scrapers._abstract import HEADERS
 import requests
 
 
@@ -42,7 +41,6 @@ def recipe(image_filename):
     image_src = recipe.json().get('image_src')
     image = requests.get(
         url=f'http://imageproxy/192,png/{image_src}',
-        headers=HEADERS,
         proxies={}
     )
 
