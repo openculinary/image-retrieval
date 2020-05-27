@@ -29,10 +29,9 @@ def recipe(image_filename):
     recipe_id, extension = path.splitext(image_filename)
 
     recipe = requests.get(
-        url=f'http://api-service/api/recipes/{recipe_id}',
+        url=f'http://backend-service/api/recipes/{recipe_id}',
         proxies={}
     )
-
     try:
         recipe.raise_for_status()
     except Exception:

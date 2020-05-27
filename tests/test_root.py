@@ -3,7 +3,7 @@ import pytest
 import responses
 
 
-API_URL = 'http://api-service'
+API_URL = 'http://backend-service'
 IMAGEPROXY_URL = 'http://imageproxy'
 
 
