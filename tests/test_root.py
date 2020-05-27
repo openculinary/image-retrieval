@@ -13,7 +13,7 @@ def imageproxy_response(image_path):
     recipe_id, extension = path.splitext(image_filename)
 
     metadata_uri = f'{API_URL}/api/recipes/{recipe_id}'
-    image_uri = f'http://example.org/image.png'
+    image_uri = 'http://example.org/image.png'
     proxy_uri = f'{IMAGEPROXY_URL}/192,png/{image_uri}'
 
     data = b'not_an_image'
