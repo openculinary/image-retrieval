@@ -29,7 +29,7 @@ def recipe(image_filename):
     recipe_id, extension = path.splitext(image_filename)
 
     recipe = requests.get(
-        url=f'http://backend-service/api/recipes/{recipe_id}',
+        url=f'http://backend-service/recipes/{recipe_id}',
         proxies={}
     )
     try:
