@@ -29,7 +29,7 @@ def recipe(image_filename):
     recipe_id, extension = path.splitext(image_filename)
 
     recipe = requests.get(
-        url=f'http://backend-service/api/recipes/{recipe_id}',
+        url=f'http://api-service/recipes/{recipe_id}/view',
         proxies={}
     )
     try:
@@ -37,7 +37,7 @@ def recipe(image_filename):
     except Exception:
         return abort(404)
 
-    image_src = recipe.json().get('image_src')
+    image_src = recipe.json()['results'][0].get('image_src')
     image = requests.get(
         url=f'http://imageproxy/192,png/{image_src}',
         proxies={}
