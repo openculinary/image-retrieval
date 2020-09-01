@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: image-retrieval-ingress
@@ -7,6 +7,10 @@ spec:
   - host: image-retrieval
     http:
       paths:
-      - backend:
-          serviceName: image-retrieval-service
-          servicePort: 80
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: image-retrieval-service
+            port:
+              number: 80
