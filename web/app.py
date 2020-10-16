@@ -38,7 +38,7 @@ def domain(image_filename):
         return abort(404)
 
     image_src = recipe.json().get('image_src')
-    image_src = image_src or 'https://{domain}/favicon.ico'
+    image_src = image_src or f'https://{domain}/favicon.ico'
     image = requests.get(
         url=f'http://imageproxy/{image_src}',
         proxies={}
