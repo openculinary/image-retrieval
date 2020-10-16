@@ -23,6 +23,9 @@ requests.sessions.Session.request = request_patch
 
 app = Flask(__name__)
 
+with open('web/data/empty.ico', 'rb') as f:
+    empty_icon = f.read()
+
 
 @app.route('/domains/<image_filename>')
 def domain(image_filename):
@@ -47,7 +50,7 @@ def domain(image_filename):
     try:
         image.raise_for_status()
     except Exception:
-        return abort(404)
+        return empty_icon, 200, {'Content-Type': 'image/x-icon'}
 
     return image.content, 200, {'Content-Type': image.headers['Content-Type']}
 
