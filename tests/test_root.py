@@ -8,7 +8,7 @@ IMAGEPROXY_URL = 'http://imageproxy'
 
 
 @pytest.fixture
-def imageproxy_response(image_path):
+def recipe_responses(image_path):
     image_filename = path.basename(image_path)
     recipe_id, extension = path.splitext(image_filename)
 
@@ -25,7 +25,7 @@ def imageproxy_response(image_path):
 
 @responses.activate
 @pytest.mark.parametrize('image_path', ['image.png'])
-def test_recipe_request(client, image_path, imageproxy_response):
+def test_recipe_request(client, image_path, recipe_responses):
     response = client.get(f'/recipes/{image_path}')
 
     assert response.status_code == 200
