@@ -1,6 +1,5 @@
 from os import path
 import pytest
-import responses
 
 
 API_URL = "http://backend-service"
@@ -8,7 +7,8 @@ IMAGEPROXY_URL = "http://imageproxy"
 
 
 @pytest.fixture
-def domain_responses(image_path):
+@pytest.mark.respx
+def domain_responses(image_path, respx_mock):
     image_filename = path.basename(image_path)
     domain, extension = path.splitext(image_filename)
 
@@ -18,11 +18,10 @@ def domain_responses(image_path):
     data = b"not_an_image"
     mime_type = "image/x-icon"
 
-    responses.add(responses.GET, metadata_uri, json={"image_src": None})
-    responses.add(responses.GET, proxy_uri, body=data, content_type=mime_type)
+    respx_mock.get(metadata_uri).respond(json={"image_src": None})
+    respx_mock.get(proxy_uri).respond(content=data, headers={"Content-Type": mime_type})
 
 
-@responses.activate
 @pytest.mark.parametrize("image_path", ["example.com.ico"])
 def test_domain_request(client, image_path, domain_responses):
     response = client.get(f"/domains/{image_path}")
@@ -33,7 +32,8 @@ def test_domain_request(client, image_path, domain_responses):
 
 
 @pytest.fixture
-def recipe_responses(image_path):
+@pytest.mark.respx
+def recipe_responses(image_path, respx_mock):
     image_filename = path.basename(image_path)
     recipe_id, extension = path.splitext(image_filename)
 
@@ -44,11 +44,10 @@ def recipe_responses(image_path):
     data = b"not_an_image"
     mime_type = "image/png"
 
-    responses.add(responses.GET, metadata_uri, json={"image_src": image_uri})
-    responses.add(responses.GET, proxy_uri, body=data, content_type=mime_type)
+    respx_mock.get(metadata_uri).respond(json={"image_src": image_uri})
+    respx_mock.get(proxy_uri).respond(content=data, headers={"Content-Type": mime_type})
 
 
-@responses.activate
 @pytest.mark.parametrize("image_path", ["image.png"])
 def test_recipe_request(client, image_path, recipe_responses):
     response = client.get(f"/recipes/{image_path}")
