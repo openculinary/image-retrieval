@@ -38,6 +38,9 @@ def domain(image_filename):
         return abort(404)
     domain = response.json()
 
+    if not domain.get("image_enabled"):
+        return empty_icon, 200, {"Content-Type": "image/x-icon"}
+
     image_src = domain.get("image_src")
     image_src = image_src or f"https://{domain_name}/favicon.ico"
     image = httpx.get(url=f"http://imageproxy/{image_src}", proxies={})
@@ -64,6 +67,9 @@ def recipe(image_filename):
     except Exception:
         return abort(404)
     recipe = response.json()
+
+    if not recipe.get("image_enabled"):
+        return empty_image, 200, {"Content-Type": "image/png"}
 
     image_src = recipe.get("image_src")
     image = httpx.get(f"http://imageproxy/192,png/{image_src}", proxies={})

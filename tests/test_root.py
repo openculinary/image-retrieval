@@ -18,7 +18,8 @@ def domain_responses(image_path, respx_mock):
     data = b"not_an_image"
     mime_type = "image/x-icon"
 
-    respx_mock.get(metadata_uri).respond(json={"image_src": None})
+    response = {"image_src": None, "image_enabled": True}
+    respx_mock.get(metadata_uri).respond(json=response)
     respx_mock.get(proxy_uri).respond(content=data, headers={"Content-Type": mime_type})
 
 
@@ -44,7 +45,8 @@ def recipe_responses(image_path, respx_mock):
     data = b"not_an_image"
     mime_type = "image/png"
 
-    respx_mock.get(metadata_uri).respond(json={"image_src": image_uri})
+    response = {"image_src": image_uri, "image_enabled": True}
+    respx_mock.get(metadata_uri).respond(json=response)
     respx_mock.get(proxy_uri).respond(content=data, headers={"Content-Type": mime_type})
 
 
