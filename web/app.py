@@ -29,16 +29,17 @@ with open("web/data/empty.ico", "rb") as f:
 
 @app.route("/domains/<image_filename>")
 def domain(image_filename):
-    domain, extension = path.splitext(image_filename)
+    domain_name, extension = path.splitext(image_filename)
 
-    response = httpx.get(url=f"http://backend-service/domains/{domain}", proxies={})
+    response = httpx.get(url=f"http://backend-service/domains/{domain_name}", proxies={})
     try:
         response.raise_for_status()
     except Exception:
         return abort(404)
+    domain = response.json()
 
-    image_src = response.json().get("image_src")
-    image_src = image_src or f"https://{domain}/favicon.ico"
+    image_src = domain.get("image_src")
+    image_src = image_src or f"https://{domain_name}/favicon.ico"
     image = httpx.get(url=f"http://imageproxy/{image_src}", proxies={})
 
     try:
@@ -62,8 +63,9 @@ def recipe(image_filename):
         response.raise_for_status()
     except Exception:
         return abort(404)
+    recipe = response.json()
 
-    image_src = response.json().get("image_src")
+    image_src = recipe.get("image_src")
     image = httpx.get(url=f"http://imageproxy/192,png/{image_src}", proxies={})
 
     try:
