@@ -31,13 +31,13 @@ with open("web/data/empty.ico", "rb") as f:
 def domain(image_filename):
     domain, extension = path.splitext(image_filename)
 
-    recipe = httpx.get(url=f"http://backend-service/domains/{domain}", proxies={})
+    response = httpx.get(url=f"http://backend-service/domains/{domain}", proxies={})
     try:
-        recipe.raise_for_status()
+        response.raise_for_status()
     except Exception:
         return abort(404)
 
-    image_src = recipe.json().get("image_src")
+    image_src = response.json().get("image_src")
     image_src = image_src or f"https://{domain}/favicon.ico"
     image = httpx.get(url=f"http://imageproxy/{image_src}", proxies={})
 
@@ -57,13 +57,13 @@ with open("web/data/empty.png", "rb") as f:
 def recipe(image_filename):
     recipe_id, extension = path.splitext(image_filename)
 
-    recipe = httpx.get(url=f"http://backend-service/recipes/{recipe_id}", proxies={})
+    response = httpx.get(url=f"http://backend-service/recipes/{recipe_id}", proxies={})
     try:
-        recipe.raise_for_status()
+        response.raise_for_status()
     except Exception:
         return abort(404)
 
-    image_src = recipe.json().get("image_src")
+    image_src = response.json().get("image_src")
     image = httpx.get(url=f"http://imageproxy/192,png/{image_src}", proxies={})
 
     try:
