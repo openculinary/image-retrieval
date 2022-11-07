@@ -49,6 +49,10 @@ def domain(image_filename):
     return image.content, 200, {"Content-Type": image.headers["Content-Type"]}
 
 
+with open("web/data/empty.png", "rb") as f:
+    empty_image = f.read()
+
+
 @app.route("/recipes/<image_filename>")
 def recipe(image_filename):
     recipe_id, extension = path.splitext(image_filename)
