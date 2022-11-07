@@ -31,7 +31,7 @@ with open("web/data/empty.ico", "rb") as f:
 def domain(image_filename):
     domain_name, extension = path.splitext(image_filename)
 
-    response = httpx.get(url=f"http://backend-service/domains/{domain_name}", proxies={})
+    response = httpx.get(f"http://backend-service/domains/{domain_name}", proxies={})
     try:
         response.raise_for_status()
     except Exception:
@@ -58,7 +58,7 @@ with open("web/data/empty.png", "rb") as f:
 def recipe(image_filename):
     recipe_id, extension = path.splitext(image_filename)
 
-    response = httpx.get(url=f"http://backend-service/recipes/{recipe_id}", proxies={})
+    response = httpx.get(f"http://backend-service/recipes/{recipe_id}", proxies={})
     try:
         response.raise_for_status()
     except Exception:
@@ -66,7 +66,7 @@ def recipe(image_filename):
     recipe = response.json()
 
     image_src = recipe.get("image_src")
-    image = httpx.get(url=f"http://imageproxy/192,png/{image_src}", proxies={})
+    image = httpx.get(f"http://imageproxy/192,png/{image_src}", proxies={})
 
     try:
         image.raise_for_status()
