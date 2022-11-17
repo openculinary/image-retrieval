@@ -29,16 +29,20 @@ with open("web/data/empty.ico", "rb") as f:
 
 @app.route("/domains/<image_filename>")
 def domain(image_filename):
-    domain, extension = path.splitext(image_filename)
+    domain_name, extension = path.splitext(image_filename)
 
-    recipe = httpx.get(url=f"http://backend-service/domains/{domain}", proxies={})
+    response = httpx.get(f"http://backend-service/domains/{domain_name}", proxies={})
     try:
-        recipe.raise_for_status()
+        response.raise_for_status()
     except Exception:
         return abort(404)
+    domain = response.json()
 
-    image_src = recipe.json().get("image_src")
-    image_src = image_src or f"https://{domain}/favicon.ico"
+    if not domain.get("image_enabled"):
+        return empty_icon, 200, {"Content-Type": "image/x-icon"}
+
+    image_src = domain.get("image_src")
+    image_src = image_src or f"https://{domain_name}/favicon.ico"
     image = httpx.get(url=f"http://imageproxy/{image_src}", proxies={})
 
     try:
@@ -49,18 +53,26 @@ def domain(image_filename):
     return image.content, 200, {"Content-Type": image.headers["Content-Type"]}
 
 
+with open("web/data/empty.png", "rb") as f:
+    empty_image = f.read()
+
+
 @app.route("/recipes/<image_filename>")
 def recipe(image_filename):
     recipe_id, extension = path.splitext(image_filename)
 
-    recipe = httpx.get(url=f"http://backend-service/recipes/{recipe_id}", proxies={})
+    response = httpx.get(f"http://backend-service/recipes/{recipe_id}", proxies={})
     try:
-        recipe.raise_for_status()
+        response.raise_for_status()
     except Exception:
         return abort(404)
+    recipe = response.json()
 
-    image_src = recipe.json().get("image_src")
-    image = httpx.get(url=f"http://imageproxy/192,png/{image_src}", proxies={})
+    if not recipe.get("image_enabled"):
+        return empty_image, 200, {"Content-Type": "image/png"}
+
+    image_src = recipe.get("image_src")
+    image = httpx.get(f"http://imageproxy/192,png/{image_src}", proxies={})
 
     try:
         image.raise_for_status()
