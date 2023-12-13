@@ -26,8 +26,8 @@ spec:
         volumeMounts:
         - mountPath: /var/tmp
           name: var-tmp
-        - name: proxy-cert
-          mountPath: /etc/ssl/k8s/proxy-cert
+        - mountPath: /etc/ssl/k8s/proxy-cert
+          name: proxy-cert
       volumes:
       - name: var-tmp
         emptyDir:
