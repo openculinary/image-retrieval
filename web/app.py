@@ -5,13 +5,7 @@ import httpx
 
 
 def request_patch(self, *args, **kwargs):
-    kwargs["proxies"] = kwargs.pop(
-        "proxies",
-        {
-            "http": "http://proxy:3128",
-            "https": "http://proxy:3128",
-        },
-    )
+    kwargs["proxy"] = kwargs.pop("proxy", "http://proxy:3128")
     kwargs["timeout"] = kwargs.pop("timeout", 5)
     kwargs["verify"] = kwargs.pop("verify", "/etc/ssl/k8s/proxy-cert/ca.crt")
     return self.request_orig(*args, **kwargs)
@@ -31,7 +25,7 @@ with open("web/data/empty.ico", "rb") as f:
 def domain(image_filename):
     domain_name, extension = path.splitext(image_filename)
 
-    response = httpx.get(f"http://backend-service/domains/{domain_name}", proxies={})
+    response = httpx.get(f"http://backend-service/domains/{domain_name}", proxy=None)
     try:
         response.raise_for_status()
     except Exception:
@@ -43,7 +37,7 @@ def domain(image_filename):
 
     image_src = domain.get("image_src")
     image_src = image_src or f"https://{domain_name}/favicon.ico"
-    image = httpx.get(url=f"http://imageproxy/{image_src}", proxies={})
+    image = httpx.get(url=f"http://imageproxy/{image_src}", proxy=None)
 
     try:
         image.raise_for_status()
@@ -61,7 +55,7 @@ with open("web/data/empty.png", "rb") as f:
 def recipe(image_filename):
     recipe_id, extension = path.splitext(image_filename)
 
-    response = httpx.get(f"http://backend-service/recipes/{recipe_id}", proxies={})
+    response = httpx.get(f"http://backend-service/recipes/{recipe_id}", proxy=None)
     try:
         response.raise_for_status()
     except Exception:
@@ -72,7 +66,7 @@ def recipe(image_filename):
         return empty_image, 200, {"Content-Type": "image/png"}
 
     image_src = recipe.get("image_src")
-    image = httpx.get(f"http://imageproxy/192,png/{image_src}", proxies={})
+    image = httpx.get(f"http://imageproxy/192,png/{image_src}", proxy=None)
 
     try:
         image.raise_for_status()
