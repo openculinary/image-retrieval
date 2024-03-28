@@ -27,13 +27,11 @@ def domain_responses(image_path, respx_mock, **response_data):
 
 
 @pytest.fixture
-@pytest.mark.respx
 def domain_responses_enabled(image_path, respx_mock):
     return domain_responses(image_path, respx_mock, enabled=True)
 
 
 @pytest.fixture
-@pytest.mark.respx
 def domain_responses_undefined(image_path, respx_mock):
     return domain_responses(image_path, respx_mock)
 
@@ -75,13 +73,11 @@ def recipe_responses(image_path, respx_mock, **response_data):
 
 
 @pytest.fixture
-@pytest.mark.respx
 def recipe_responses_enabled(image_path, respx_mock):
     return recipe_responses(image_path, respx_mock, enabled=True)
 
 
 @pytest.fixture
-@pytest.mark.respx
 def recipe_responses_undefined(image_path, respx_mock):
     return recipe_responses(image_path, respx_mock)
 
