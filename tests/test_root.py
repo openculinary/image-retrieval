@@ -36,7 +36,7 @@ def domain_responses_undefined(image_path, respx_mock):
     return domain_responses(image_path, respx_mock)
 
 
-@pytest.mark.parametrize("image_path", ["example.com.ico"])
+@pytest.mark.parametrize("image_path", ["example.test.ico"])
 def test_domain_request(client, image_path, domain_responses_enabled):
     response = client.get(f"/domains/{image_path}")
 
@@ -45,7 +45,7 @@ def test_domain_request(client, image_path, domain_responses_enabled):
     assert response.headers["Content-Type"] == "image/x-icon"
 
 
-@pytest.mark.parametrize("image_path", ["example.com.ico"])
+@pytest.mark.parametrize("image_path", ["example.test.ico"])
 def test_domain_request_image_undefined(client, image_path, domain_responses_undefined):
     response = client.get(f"/domains/{image_path}")
 
@@ -59,7 +59,7 @@ def recipe_responses(image_path, respx_mock, **response_data):
     recipe_id, extension = path.splitext(image_filename)
 
     metadata_uri = f"{API_URL}/recipes/{recipe_id}"
-    image_uri = "http://example.org/image.png"
+    image_uri = "http://example.test/image.png"
     proxy_uri = f"{IMAGEPROXY_URL}/192,png/{image_uri}"
 
     data = b"not_an_image"
