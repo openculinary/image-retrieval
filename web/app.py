@@ -1,13 +1,20 @@
 from os import path
+import ssl
 
 from flask import Flask, abort
 import httpx
 
 
+def get_tls_context():
+    context = ssl.create_default_context(cafile="/etc/ssl/k8s/proxy-cert/ca.crt")
+    while True:
+        yield context
+
+
 def request_patch(self, *args, **kwargs):
     kwargs["proxy"] = kwargs.pop("proxy", "http://proxy:3128")
     kwargs["timeout"] = kwargs.pop("timeout", 5)
-    kwargs["verify"] = kwargs.pop("verify", "/etc/ssl/k8s/proxy-cert/ca.crt")
+    kwargs["verify"] = kwargs.pop("verify", get_tls_context())
     return self.request_orig(*args, **kwargs)
 
 
